@@ -1,7 +1,7 @@
 // 缓存
 var self = this;
-var hash = "33cbe8b4ec9785345357f842254c4fb2";
-var version = "4.0.8.16";
+var hash = "b29f0d442ba61f7acf5a7d7e22767bca";
+var version = "4.0.8.17";
 var htmlVersion;
 var openName = "pwa";
 let idx = self.location.pathname.lastIndexOf("/");
@@ -662,6 +662,7 @@ async function checkSW() {
 			const text = await response.text();
 			var hasgRegex = /var hash = "(.*?)";/;
 			var match = text.match(hasgRegex);
+			console.warn("[sw_pwa] checkSW ", match, hash);
 			if (match && match[1] != hash)
 				callClients("unregister");
 		}
