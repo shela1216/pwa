@@ -1,7 +1,7 @@
 // 缓存
 var self = this;
-var hash = "3460fa4dc5037cc227729a4ed9217f0f";
-var version = "4.0.8.20";
+var hash = "af3da67d7366a8903e200db7d150c564";
+var version = "4.0.8.21";
 var htmlVersion;
 var openName = "pwa";
 let idx = self.location.pathname.lastIndexOf("/");
