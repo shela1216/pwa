@@ -41,7 +41,7 @@
 		//h5網頁設置參數
 		var htmlInfo = {};
 		htmlInfo.client = "h5";
-		htmlInfo.version = "4.0.8.17";
+		htmlInfo.version = "4.0.8.18";
 		htmlInfo.htmlStartTime = Date.now();
 		htmlInfo.bIsRelease = true;
 		htmlInfo.resUrlL = "resource/js/res_L-551dd41614.bgjson";
@@ -482,7 +482,9 @@
 								bOldIOS = true;
 						}
 					}
+					console.warn("serviceWorker update oldIOS", bOldIOS, navigator.serviceWorker.controller);
 					if (bOldIOS) {
+
 						if (navigator.serviceWorker.controller)
 							navigator.serviceWorker.controller.postMessage({ type: "UPDATE", value: htmlInfo.version });
 					} else {
