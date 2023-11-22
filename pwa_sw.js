@@ -1,7 +1,7 @@
 // 缓存
 var self = this;
-var hash = "510c7f466c55749916af6d833d75f848";
-var version = "4.0.8.21";
+var hash = "3460fa4dc5037cc227729a4ed9217f0f";
+var version = "4.0.8.20";
 var htmlVersion;
 var openName = "pwa";
 let idx = self.location.pathname.lastIndexOf("/");
@@ -605,9 +605,13 @@ async function putInCache(requestUrl, response) {
 
 /** 抓取新的html並緩存 */
 async function cacheHtml(request) {
-	var requestUrl = pwaHtml;
-	if (request) requestUrl = request;
-	var uri = new URL(requestUrl)
+	var requestUrl;
+	if (request) {
+		requestUrl = request;
+	} else {
+		requestUrl = pwaHtml;
+		var uri = new URL(requestUrl)
+	}
 	try {
 		response = await fetch(requestUrl);
 		if (response && response.status == 200) {
