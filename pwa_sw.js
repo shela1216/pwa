@@ -1,7 +1,7 @@
 // 缓存
 var self = this;
-var hash = "0df0b8c619bef07693852262d2f02ed8";
-var version = "4.0.8.19";
+var hash = "efa12332c712cad0a55e10e9af28eb73";
+var version = "4.0.8.20";
 var htmlVersion;
 var openName = "pwa";
 let idx = self.location.pathname.lastIndexOf("/");
@@ -604,8 +604,9 @@ async function putInCache(requestUrl, response) {
 }
 
 /** 抓取新的html並緩存 */
-async function cacheHtml() {
+async function cacheHtml(request) {
 	var requestUrl = pwaHtml;
+	if (request) requestUrl = request;
 	var uri = new URL(requestUrl)
 	try {
 		response = await fetch(requestUrl);
@@ -618,13 +619,14 @@ async function cacheHtml() {
 }
 
 /** 抓取檔案 */
-async function fetchFile(uri) {
+async function fetchFile(uri, request) {
 	var response;
 	try {
 		var requestUrl = uri.origin + uri.pathname;
+		var cacheType = requestUrl == pwaHtml ? "reload" : "no-cache";
 		if (requestUrl == pwaHtml) {
 			//html 每次都抓取新的,抓取不到才使用緩存的
-			response = await cacheHtml();
+			response = await cacheHtml(request);
 			if (response) return response;
 		}
 		response = await caches.match(requestUrl);
@@ -747,5 +749,5 @@ self.addEventListener('fetch', function (event) {
 	//排除排除非當前目錄
 	if (!uri.pathname.match(domainPath)) return false;
 
-	event.respondWith(fetchFile(uri));
+	event.respondWith(fetchFile(uri, request));
 });
