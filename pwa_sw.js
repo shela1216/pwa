@@ -1,7 +1,7 @@
 // 缓存
 var self = this;
-var hash = "55ad78c9fc334725c4d0fbdbfc0153ab";
-var version = "4.0.8.23";
+var hash = "64094dc754f8f37a63868eb240d5d6ad";
+var version = "4.0.8.24";
 var htmlVersion;
 var openName = "pwa";
 let idx = self.location.pathname.lastIndexOf("/");
@@ -662,6 +662,8 @@ async function fetchFile(uri, request) {
 
 /** 檢查是否更新 */
 async function checkSW() {
+
+	callClients("checkSW start: v" + version);
 	try {
 		let response = await fetch(self.location.href);
 		if (response && response.status == 200) {
@@ -675,6 +677,7 @@ async function checkSW() {
 		}
 	} catch (e) {
 		console.error("[sw_pwa]  checkSW fail", e.toString(), version);
+		callClients("checkSW fail: v" + version);
 	}
 }
 
