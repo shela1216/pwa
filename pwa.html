@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" id="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="pwa_dir/style-33d8b61b8f.css">
+    <title>BG真人娱乐</title>
+</head>
+
+<body>
+    <div id="contentPWA">
+        <div id="pwaWord"></div>
+        <div id="divImg">
+            <img id="infoImage" src="" alt="">
+        </div>
+    </div>
+    <script>
+        //獲取locale參數
+        var url = window.location.href;
+        var wls = url.indexOf('?') != -1 ? "?" + url.split('?')[1] : "";
+        var args = parse(wls);
+        if (args.locale && args.locale.indexOf("-") != -1) {
+            var loc = args.locale.replace(/-/g, "_")
+            args.locale = loc;
+        }
+        // 取得locale json資料
+        var request = new XMLHttpRequest();
+        request.open('GET', 'pwa_dir/locale-5e5d16055c.json', true);
+        request.onload = function () {
+            if (request.status >= 200 && request.status < 400) {
+                // Success!
+                var data = JSON.parse(request.responseText);
+                var content = document.getElementById("contentPWA");
+                var divWord = document.getElementById("pwaWord");
+                var infoImage = document.getElementById("infoImage");
+                var ua = navigator.userAgent || navigator.vendor || window.opera;
+                var locale = args.locale ? args.locale : "zh_CN";
+                if (args.locale && args.locale == "ms_MY") locale = "id_ID"
+                if (data["content"][locale]) {
+                    divWord.innerHTML = data["content"][locale]
+                    infoImage.src = data["img"][locale];
+                } else {
+                    divWord.innerHTML = data["content"]["en_US"]
+                    infoImage.src = data["img"]["en_US"];
+                }
+            }
+        };
+        request.send();
+
+        function parse(str) {
+            var ret = {};
+            if (!str) {
+                return ret;
+            }
+            var seg = str.replace(/^\?/, "").split('&');
+            for (var i = seg.length - 1; i >= 0; i--) {
+                if (!seg[i]) {
+                    continue;
+                }
+                var s = seg[i].split('=');
+                ret[s[0]] = s[1];
+            }
+            return ret;
+        };
+    </script>
+</body>
+
+</html>

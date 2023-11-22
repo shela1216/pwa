@@ -1,0 +1,530 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>BG真人娱乐</title>
+	<meta name="viewport" id="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="full-screen" content="true">
+	<meta name="360-fullscreen" content="true">
+	<meta name="theme-color" content="#000">
+	<!-- UC强制全屏 -->
+	<meta name="full-screen" content="yes">
+	<meta name="browsermode" content="application">
+	<!-- QQ强制全屏 -->
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
+	<link rel="manifest" href="pwa_dir/manifest-1d98f25fee.json">
+	<link rel="apple-touch-icon" sizes="180x180" href="pwa_dir/180x180-74e28c8073.png">
+
+	
+	<style>body,html{width:100%;height:100%;margin:0;padding:0;border:0;background:#000;font-family:'微软雅黑','微軟正黑體',Arial;-ms-touch-action:none;-webkit-overflow-scrolling:touch}#preloader{border-width:6px;border-style:solid;border-color:#dcdcdc #dcdcdc #f2a63b00 #dcdcdc;border-radius:50%;display:block;width:80px;height:80px;-webkit-animation:rotate 1.2s linear infinite;animation:rotate 1.2s linear infinite;position:fixed;left:50%;top:50%;margin-left:-43px;margin-top:-43px;box-sizing:border-box}@-webkit-keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}</style>
+</head>
+
+<body>
+	<div id="preloader"></div>
+	<div id="mainBox">
+		<div id="game" style="margin:auto;width:100%;height:100%;overflow:hidden;position:absolute" class="egret-player" data-entry-class="Main" data-orientation="auto" data-scale-mode="showAll" data-frame-rate="60" data-content-width="720" data-content-height="1280" data-show-paint-rect="false" data-multi-fingered="2" data-show-fps="false" data-show-log="false" data-show-fps-style="x:0,y:0,size:12,textColor:0xffffff,bgAlpha:0.5">
+		</div>
+	</div>
+
+	<script>
+		var urlArray = [];
+		var bUrlLogout = false;
+		var bInitWeb = false;
+		//url網址參數
+		var bgInfo = {};
+		parseUrlParams(bgInfo);
+		bgInfo.defaultSn = bgInfo.sn;
+		//h5網頁設置參數
+		var htmlInfo = {};
+		htmlInfo.client = "h5";
+		htmlInfo.version = "4.0.8.15";
+		htmlInfo.htmlStartTime = Date.now();
+		htmlInfo.bIsRelease = true;
+		htmlInfo.resUrlL = "resource/js/res_L-551dd41614.bgjson";
+		htmlInfo.copyright = "Copyright © 2023 Big Gaming All Rights Reserved";
+		//信用網列表
+		htmlInfo.arrSnCredit = ["ym06", "ye06", "jt11", "ea12", "aa15"];
+		//UG廳sn
+		htmlInfo.sUG = "ym06";
+		//JT廳sn
+		htmlInfo.sUB = "jt11";
+		//====custom
+		htmlInfo.brand = "BG";
+		//荷官路徑規則
+		htmlInfo.dealerUrl = window.location.origin + "/dealer/v2/";
+		//遊戲規則
+		htmlInfo.helpUrl = window.location.origin + "/help/index.html";
+		//APP使用說明
+		htmlInfo.appGuideUrl = window.location.origin + "/app/guide/index.html";
+		//PWA
+		htmlInfo.pwaUrl = "https://cyttest.github.io/pwa/index.html";
+		//現場視頻
+		htmlInfo.sceneStream = ["scene1_1", "scene2_1", "scene5_1"];
+
+		//預設載入樣式 
+		htmlInfo.adUrl = "resource/custom/demo/ad-088fce3b4c.mp4";
+		htmlInfo.videoPoster = "resource/custom/demo/adLogo-8a72100af2.png";
+		htmlInfo.adTitle = "resource/custom/demo/liveCasino-73317af4c4.png"
+		htmlInfo.adBackground = "resource/custom/demo/background-44bf64b04e.png"
+		//多語banner
+		htmlInfo.banner = {};
+		htmlInfo.banner.zh_CN = {
+			bannerUrl: ["resource/banner/demo/1_P_zh_CN-837f1dbe29.jpg", "resource/banner/demo/2_P_zh_CN-2b488ada62.jpg", "resource/banner/demo/3_P_zh_CN-993e92448e.jpg", "resource/banner/demo/4_P_zh_CN-f7432d6b59.jpg", "resource/banner/demo/5_P_zh_CN-b98dfe5f3c.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_zh_CN-2e60f44f12.jpg", "resource/banner/demo/2_L_zh_CN-2de8440331.jpg", "resource/banner/demo/3_L_zh_CN-122cf50286.jpg", "resource/banner/demo/4_L_zh_CN-c8c9dc18d6.jpg", "resource/banner/demo/5_L_zh_CN-c02edb8209.jpg"]
+		};
+		htmlInfo.banner.zh_TW = {
+			bannerUrl: ["resource/banner/demo/1_P_zh_TW-482e1ac17b.jpg", "resource/banner/demo/2_P_zh_TW-cab782bc3d.jpg", "resource/banner/demo/3_P_zh_TW-0961de6c65.jpg", "resource/banner/demo/4_P_zh_TW-1b3b1befe0.jpg", "resource/banner/demo/5_P_zh_TW-229171e32e.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_zh_TW-7ea8b811c0.jpg", "resource/banner/demo/2_L_zh_TW-c4babc0bbd.jpg", "resource/banner/demo/3_L_zh_TW-fb06c16006.jpg", "resource/banner/demo/4_L_zh_TW-b019b21b10.jpg", "resource/banner/demo/5_L_zh_TW-8ae83b4ea0.jpg"]
+		};
+		htmlInfo.banner.en_US = {
+			bannerUrl: ["resource/banner/demo/1_P_en_US-b72ae855dd.jpg", "resource/banner/demo/2_P_en_US-b9f8f555b1.jpg", "resource/banner/demo/3_P_en_US-4bf687a7ce.jpg", "resource/banner/demo/4_P_en_US-7762485f76.jpg", "resource/banner/demo/5_P_en_US-90437ebbf1.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_en_US-b57e474680.jpg", "resource/banner/demo/2_L_en_US-a30202ad5b.jpg", "resource/banner/demo/3_L_en_US-94dce987ce.jpg", "resource/banner/demo/4_L_en_US-d8881cd908.jpg", "resource/banner/demo/5_L_en_US-6dbddc13f9.jpg"]
+		};
+		htmlInfo.banner.ja_JP = {
+			bannerUrl: ["resource/banner/demo/1_P_ja_JP-8fb8dcae52.jpg", "resource/banner/demo/2_P_ja_JP-6eb1f0f074.jpg", "resource/banner/demo/3_P_ja_JP-1abc1dc1a1.jpg", "resource/banner/demo/4_P_ja_JP-5e7a4c10b3.jpg", "resource/banner/demo/5_P_en_US-90437ebbf1.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_ja_JP-ce9dfc8e8a.jpg", "resource/banner/demo/2_L_ja_JP-38d3a6dc5b.jpg", "resource/banner/demo/3_L_ja_JP-8c5b2f9e42.jpg", "resource/banner/demo/4_L_ja_JP-58abc3faaa.jpg", "resource/banner/demo/5_L_en_US-6dbddc13f9.jpg"]
+		};
+		htmlInfo.banner.es_ES = {
+			bannerUrl: ["resource/banner/demo/1_P_es_ES-cf705bad95.jpg", "resource/banner/demo/2_P_es_ES-72a2796517.jpg", "resource/banner/demo/3_P_es_ES-bc02be9b29.jpg", "resource/banner/demo/4_P_es_ES-68f0842147.jpg", "resource/banner/demo/5_P_es_ES-b8e69e5053.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_es_ES-26f369cacd.jpg", "resource/banner/demo/2_L_es_ES-08e9984945.jpg", "resource/banner/demo/3_L_es_ES-1769a34b84.jpg", "resource/banner/demo/4_L_es_ES-03d720ec39.jpg", "resource/banner/demo/5_L_es_ES-22a37405b7.jpg"]
+		};
+		htmlInfo.banner.pt_PT = {
+			bannerUrl: ["resource/banner/demo/1_P_pt_PT-58d906659c.jpg", "resource/banner/demo/2_P_pt_PT-812bec5512.jpg", "resource/banner/demo/3_P_pt_PT-33d01332b1.jpg", "resource/banner/demo/4_P_pt_PT-dee48a0923.jpg", "resource/banner/demo/5_P_pt_PT-4abe396735.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_pt_PT-66d70fcd07.jpg", "resource/banner/demo/2_L_pt_PT-eb2516d06c.jpg", "resource/banner/demo/3_L_pt_PT-553b702824.jpg", "resource/banner/demo/4_L_pt_PT-f2a050c079.jpg", "resource/banner/demo/5_L_pt_PT-9aa80463b3.jpg"]
+		};
+		htmlInfo.banner.vi_VN = {
+			bannerUrl: ["resource/banner/demo/1_P_vi_VN-c3bc811203.jpg", "resource/banner/demo/2_P_vi_VN-ac8fa40d0f.jpg", "resource/banner/demo/3_P_vi_VN-6aa35f045c.jpg", "resource/banner/demo/4_P_vi_VN-a9a9d8348c.jpg", "resource/banner/demo/5_P_vi_VN-a6d6c1fdd8.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_vi_VN-1924c23359.jpg", "resource/banner/demo/2_L_vi_VN-1900fa95b0.jpg", "resource/banner/demo/3_L_vi_VN-a3bfb3d58b.jpg", "resource/banner/demo/4_L_vi_VN-cba95479ce.jpg", "resource/banner/demo/5_L_vi_VN-0d72192c85.jpg"]
+		};
+		htmlInfo.banner.th_TH = {
+			bannerUrl: ["resource/banner/demo/1_P_th_TH-9b2b147ba1.jpg", "resource/banner/demo/2_P_th_TH-cdc640dea9.jpg", "resource/banner/demo/3_P_th_TH-a549f21785.jpg", "resource/banner/demo/4_P_th_TH-5349a84ff2.jpg", "resource/banner/demo/5_P_th_TH-6bc5611777.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_th_TH-739b6a5753.jpg", "resource/banner/demo/2_L_th_TH-960cb297e2.jpg", "resource/banner/demo/3_L_th_TH-12b39e27cf.jpg", "resource/banner/demo/4_L_th_TH-f56c5fd175.jpg", "resource/banner/demo/5_L_th_TH-88e107c42a.jpg"]
+		};
+		htmlInfo.banner.ko_KR = {
+			bannerUrl: ["resource/banner/demo/1_P_ko_KR-838105567b.jpg", "resource/banner/demo/2_P_ko_KR-8682e50159.jpg", "resource/banner/demo/3_P_ko_KR-deedc0e786.jpg", "resource/banner/demo/4_P_ko_KR-fc662b4d51.jpg", "resource/banner/demo/5_P_en_US-90437ebbf1.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_ko_KR-99b97b992e.jpg", "resource/banner/demo/2_L_ko_KR-5292cb638f.jpg", "resource/banner/demo/3_L_ko_KR-d637b23c17.jpg", "resource/banner/demo/4_L_ko_KR-c0401b9692.jpg", "resource/banner/demo/5_L_en_US-6dbddc13f9.jpg"]
+		};
+		htmlInfo.banner.it_IT = {
+			bannerUrl: ["resource/banner/demo/1_P_it_IT-ae1a425600.jpg", "resource/banner/demo/2_P_en_US-b9f8f555b1.jpg", "resource/banner/demo/3_P_en_US-4bf687a7ce.jpg", "resource/banner/demo/4_P_en_US-7762485f76.jpg", "resource/banner/demo/5_P_en_US-90437ebbf1.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_it_IT-68eddb7792.jpg", "resource/banner/demo/2_L_en_US-a30202ad5b.jpg", "resource/banner/demo/3_L_en_US-94dce987ce.jpg", "resource/banner/demo/4_L_en_US-d8881cd908.jpg", "resource/banner/demo/5_L_en_US-6dbddc13f9.jpg"]
+		};
+		htmlInfo.banner.id_ID = {
+			bannerUrl: ["resource/banner/demo/1_P_id_ID-740a0decbc.jpg", "resource/banner/demo/2_P_id_ID-5e7cfff500.jpg", "resource/banner/demo/3_P_id_ID-d770abd914.jpg", "resource/banner/demo/4_P_id_ID-5562d7d65f.jpg", "resource/banner/demo/5_P_id_ID-2254027150.jpg"],
+			bannerUrl_L: ["resource/banner/demo/1_L_id_ID-a5ddd6cd48.jpg", "resource/banner/demo/2_L_id_ID-3333f8ea48.jpg", "resource/banner/demo/3_L_id_ID-f18dfc46b5.jpg", "resource/banner/demo/4_L_id_ID-90e008f380.jpg", "resource/banner/demo/5_L_id_ID-1a4b1dfd24.jpg"]
+		};
+		//APP下載位址
+		htmlInfo.appDownloadUrl = {
+			ym06: {
+				android: "/app/ym06/game.apk",
+				superSignatureUrl: true
+			}, jt11: {
+				android: "/app/jt11/game.apk",
+				superSignatureUrl: true
+			}, aa15: {
+				android: "/app/aa15/game.apk",
+				superSignatureUrl: true
+			}, ea12: {
+				android: "/app/ea12/game.apk",
+				// ios: "/app/ea12/game.plist",
+			}, ye06: {
+				android: "/app/ye06/game.apk",
+				// ios: "/app/ye06/game.plist",
+			}, pc00: {
+				android: "/app/pc00/game.apk",
+				ios: "/app/pc00/game.plist",
+			}, gj00: {
+				android: "/app/gj00/game.apk",
+				ios: "/app/gj00/game.plist",
+			}, ok12: {
+				android: "/app/ok12/game.apk",
+				ios: "/app/ok12/game.plist",
+			}, DEMO: {
+				android: "/app/android/game_763c4b84f8.apk",
+				iosTestflight: "https://nnk7m4j.xyz:8848/w9hU.app"
+			}, default: {
+				android: "/app/android/game.apk",
+				iosTestflight: "https://nnk7m4j.xyz:8848/w9hU.app"
+			},
+		};
+		var videoJS = "resource/js/bgv-d6d7f87407.min.js";
+		var thmJS = "resource/js/thm-532513b441.js";
+		var listJS = [
+			"resource/web/style-6168458ad2.css",
+			"libs/index-04383eda08.js",
+			"libs/egret-a3ba4fff55.min.js",
+			"libs/ExternalLib-4683577df1.min.js",
+			"libs/egret-2930803256.web.min.js",
+			"libs/assetsmanager-d8261130f8.min.js",
+			"libs/eui-55be2cff38.min.js",
+			"libs/tween-20f8a48b47.min.js",
+			"libs/game-92641ed6bb.min.js",
+			"libs/promise-1db72e0812.min.js",
+			"libs/dragonBones-d3e55aba9d.min.js",
+			"libs/BGGameLib-e6253c61ef.min.js",
+			"libs/soundjs-be02be4ef1.min.js",
+			"libs/main-326b0500af.js",
+			"libs/h5module-d41b12c69f.js"
+		];
+		htmlInfo.pwaPage = true;
+		htmlInfo.pwa = location.search.indexOf("pwaMode=true") != -1 ||
+			navigator.standalone ||
+			window.matchMedia("(display-mode: standalone)").matches ||
+			window.matchMedia("(display-mode: fullscreen)").matches;
+		console.warn("pwaPage=", htmlInfo.pwaPage, "pwa=", htmlInfo.pwa);
+		if (!htmlInfo.pwa) {
+			//顯示教學
+			var div = document.createElement("div");
+			div.setAttribute("style", "-webkit-overflow-scrolling:touch; overflow: hidden;width:100%;height:100%;position:fixed;background-color:#ffffff;z-index:49999;top:0;left:0");
+			pwaFrame = document.createElement("Iframe");
+			pwaFrame.id = "pwaFrame";
+			pwaFrame.style.width = "100%";
+			pwaFrame.style.height = "100%";
+			pwaFrame.style.border = "none";
+			pwaFrame.src = "pwa.html?locale=" + bgInfo.locale;
+			document.body.appendChild(div);
+			div.appendChild(pwaFrame);
+		} else {
+			bgInfo.cdnLineDisable = true;
+			cacheHandle();
+		}
+		function initHtml() {
+			if (bInitWeb) return;
+			bInitWeb = true;
+			var sn = bgInfo.defaultSn;
+			// 專屬客製廳移除customCss 避免影響
+			if (["ym06", "jt11", "aa15", "ok12", "pc00", "ye06", "ea12"].includes(sn))
+				bgInfo["customCss"] = undefined;
+			else if (["gj00", "ov05"].includes(sn))
+				bgInfo["customCss"] = sn;
+			if (sn == "ad00" || sn == "DEMO") {
+				htmlInfo.sceneStream = ["scene1_1", "scene2_1"];
+			}
+			//sn自訂
+			if (sn == "ym06") {
+				htmlInfo.brand = "UG";
+				htmlInfo.banner = {};
+				htmlInfo.banner.en_US = {
+					bannerUrl: ["resource/banner/ym06/1-2b74ec3269.jpg"], bannerUrl_L: ["resource/banner/ym06/1_L-8ade0101bb.jpg"]
+				};
+				htmlInfo.adUrl = "resource/custom/ym06/adGif-dc7a53e4d3.gif";
+				htmlInfo.adUrl_L = "resource/custom/ym06/adGif_L-289d3c7992.gif";
+				htmlInfo.logoUrl = "resource/custom/ym06/logo_ym06-5e716f1b36.png";
+				htmlInfo.cardBG = "resource/custom/ym06/poker-back-05396294fb.png";
+				htmlInfo.cardBigBG = "resource/custom/ym06/poker-back_big-6d32590747.png";
+				htmlInfo.copyright = "Copyright 2023 UNIVERSAL GAME All Rights Reserved";
+			} else if (sn == "jt11") {
+				htmlInfo.brand = "UB";
+				htmlInfo.banner = {};
+				htmlInfo.banner.zh_CN = {
+					bannerUrl: ["resource/banner/jt11/1_zh_CN-71552bef69.jpg"], bannerUrl_L: ["resource/banner/jt11/1_L_zh_CN-08f32c4406.jpg"]
+				};
+				htmlInfo.banner.zh_TW = {
+					bannerUrl: ["resource/banner/jt11/1_zh_TW-10575fb2f3.jpg"], bannerUrl_L: ["resource/banner/jt11/1_L_zh_TW-18198fce43.jpg"]
+				};
+				htmlInfo.banner.en_US = {
+					bannerUrl: ["resource/banner/jt11/1_en_US-3f6b9e6002.jpg"], bannerUrl_L: ["resource/banner/jt11/1_L_en_US-78a5776ebc.jpg"]
+				};
+				htmlInfo.adUrl = "resource/custom/jt11/ad-6cfe8b76a2.jpg";
+				htmlInfo.adUrl_L = "resource/custom/jt11/ad_L-fc3bc12f18.jpg";
+				htmlInfo.logoUrl = "resource/custom/jt11/logo_ub-048984cab7.png";
+				htmlInfo.cardBG = "resource/custom/jt11/poker-back-fddce97122.png";
+				htmlInfo.cardBigBG = "resource/custom/jt11/poker-back_big-d49dc38163.png";
+				htmlInfo.copyright = "Copyright 2023 UNIVERSAL GAME All Rights Reserved";
+			} else if (sn == "aa15") {
+				htmlInfo.adUrl = "resource/custom/aa15/ad-b0ccf65187.jpg";
+				htmlInfo.adUrl_L = "resource/custom/aa15/ad_L-a97d93bbcc.jpg";
+				htmlInfo.logoUrl = "resource/custom/aa15/logo_hao-70ba2e8cec.png";
+				htmlInfo.brand = "HAOBET";
+				htmlInfo.cardBG = "resource/custom/noLogo/poker-back-3aba9863ec.png";
+				htmlInfo.cardBigBG = "resource/custom/noLogo/poker-back_big-7aca4e1425.png";
+				htmlInfo.banner = {};
+				htmlInfo.banner.en_US = {
+					bannerUrl: ["resource/banner/aa15/1-a2e72b691e.jpg"], bannerUrl_L: ["resource/banner/aa15/1_L-b873e41209.jpg"]
+				};
+			} else if (sn == "ok12") {
+				htmlInfo.brand = "Globalbet";
+				htmlInfo.brandCN = "世博";
+				htmlInfo.banner = {};
+				htmlInfo.banner.en_US = {
+					bannerUrl: ["resource/banner/ok12/1-c99f8d39da.jpg", "resource/banner/ok12/2-830f1bcac7.jpg"],
+					bannerUrl_L: ["resource/banner/ok12/1_L-af272eef43.jpg", "resource/banner/ok12/2_L-7b88f3dc54.jpg"]
+				};
+				htmlInfo.adUrl = "resource/custom/ok12/ad-4f5d6b221c.jpg";
+				htmlInfo.adUrl_L = "resource/custom/ok12/ad_L-6a4329b4b7.jpg";
+				htmlInfo.logoUrl = "resource/custom/ok12/logo-dc51ba0b45.png";
+				htmlInfo.cardBG = "resource/custom/ok12/poker-back-e94ab8c83e.png";
+				htmlInfo.cardBigBG = "resource/custom/ok12/poker-back_big-36efd96b68.png";
+				htmlInfo.copyright = "Copyright 2023 Globalbet All Rights Reserved";
+			}
+			//customCss定製廳
+			if (bgInfo.customCss == "gj00") {
+				htmlInfo.brand = "VF";
+				htmlInfo.banner = {};
+				htmlInfo.banner.en_US = {
+					bannerUrl: ["resource/banner/gj00/1-00732efe8e.jpg"], bannerUrl_L: ["resource/banner/gj00/1_L-dc837031da.jpg"]
+				};
+				htmlInfo.adUrl = "resource/custom/gj00/ad-07290e64ad.jpg";
+				htmlInfo.adUrl_L = "resource/custom/gj00/ad_L-6cf7a2f7bb.jpg";
+				htmlInfo.logoUrl = "resource/custom/gj00/logo_gj00-76c9a903ff.png";
+				htmlInfo.cardBG = "resource/custom/gj00/poker-back-c8dd7672b6.png";
+				htmlInfo.cardBigBG = "resource/custom/gj00/poker-back_big-76ba72505e.png";
+			} else if (bgInfo.customCss == "ov05") {
+				htmlInfo.brand = "LION KING";
+				htmlInfo.banner = {};
+				htmlInfo.banner.en_US = {
+					bannerUrl: ["resource/banner/ov05/1-a744f98a3a.jpg"], bannerUrl_L: ["resource/banner/ov05/1_L-e631f35849.jpg"]
+				};
+				htmlInfo.adUrl = "resource/custom/ov05/ad-90ffaf39dd.jpg";
+				htmlInfo.adUrl_L = "resource/custom/ov05/ad_L-84db3445d7.jpg";
+				htmlInfo.logoUrl = "resource/custom/ov05/logo_ov05-1f0582c6f1.png";
+				htmlInfo.cardBG = "resource/custom/ov05/poker-back-7784e99c66.png";
+				htmlInfo.cardBigBG = "resource/custom/ov05/poker-back_big-ecd7e92ada.png";
+			}
+			//h5定製sn首頁圖
+			else if (sn == "vo06") {
+				htmlInfo.adUrl = "resource/custom/vo06/ad-9ae8aea433.jpg";
+				htmlInfo.adUrl_L = "resource/custom/vo06/ad_L-98eb1c6d36.jpg";
+			} else if (sn == "ka11") {
+				htmlInfo.adUrl = "resource/custom/vo06/ad-9ae8aea433.jpg";
+				htmlInfo.adUrl_L = "resource/custom/vo06/ad_L-98eb1c6d36.jpg";
+			}
+			var initDomain = function () {
+				if (bgInfo.preload || bgInfo.cdnLineDisable) return;
+				var reg = /^(https?:\/\/)(cdnx-|cdnnonx-)/i;
+				var reg2 = /-[1-9]$/
+				var url = location.origin + location.pathname;
+				url = url.substring(0, url.lastIndexOf("/") + 1);
+				var first = url.slice(0, url.indexOf('.'));
+				if (reg.test(url) && !reg2.test(first)) {
+					urlArray[0] = url;
+					for (var i = 1; i < 6; i++)
+						urlArray[i] = url.replace(".", "-" + i + ".");
+					console.log("urlArray", urlArray);
+				}
+			}
+			initDomain();
+			loadScript(listJS, function () {
+				egret.sys.$START_TIME = htmlInfo.htmlStartTime;
+				window.runEgret();
+			})
+		}
+
+		function loadScript(list, callback) {
+			var loaded = 0;
+			var total = list.length;
+			var listScript = new Array(total);
+			var loadComp = function (url, script) {
+				var idx = list.indexOf(url);
+				if (idx != -1) {
+					if (idx < 2) {
+						appendChildJS(url, script, idx == 0);
+					} else
+						listScript[idx] = script;
+					loaded++;
+					if (window.setProgress) setProgress(Math.floor(loaded / total * 10));
+					if (loaded == total) {
+						for (idx = 0; idx < listScript.length; idx++) {
+							if (listScript[idx]) {
+								appendChildJS(list[idx], listScript[idx]);
+							}
+						}
+						callback();
+					}
+				} else {
+					if (loaded == total) {
+						appendChildJS(url, script);
+					} else {
+						listScript.push(script);
+						list.push(url);
+					}
+				}
+			}
+			var appendChildJS = function (url, script, keep) {
+				document.body.appendChild(script);
+				if (!keep) script.parentNode.removeChild(script);
+			}
+			var loadReleaseJs = function (url, callback, domainIdx) {
+				const xhr = new XMLHttpRequest();
+				console.log("loadReleaseJs", url, Date.now() - htmlInfo.htmlStartTime);
+				xhr.open('GET', replaceDomain(url, domainIdx), true);
+				xhr.onload = function (e) {
+					if (xhr.status < 400 && xhr.responseText) {
+						var script;
+						if (url.indexOf(".css") != -1) {
+							script = document.createElement('style');
+							script.type = "text/css";
+							script.innerHTML = xhr.responseText;
+						} else {
+							script = document.createElement('script');
+							script.type = "text/javascript";
+							script.text = xhr.responseText;
+						}
+						console.log("loadReleaseJs complete", url, Date.now() - htmlInfo.htmlStartTime);
+						callback(url, script);
+					} else {
+						onerror();
+					}
+				};
+				var onerror = function () {
+					console.log("loadReleaseJs onerror", url, Date.now() - htmlInfo.htmlStartTime);
+					xhr.onload = null;
+					xhr.onerror = null;
+					if (window.setProgressTip) setProgressTip(url.substring(url.lastIndexOf("/") + 1));
+					setTimeout(loadReleaseJs, 1000, url, callback, domainIdx);
+				}
+				xhr.onerror = onerror;
+				xhr.send(null);
+			}
+			for (var i = 0; i < total; i++)
+				loadReleaseJs(list[i], loadComp, i % 6);
+			if (thmJS) loadReleaseJs(thmJS, loadComp, 0);
+			if (videoJS) loadReleaseJs(videoJS, loadComp, 0);
+		};
+
+		function parseUrlParams(ret) {
+			console.warn("parse", location.search);
+			var url = location.search.replace(/^\?/, "");
+			var seg = url.split('&');
+			for (var i = seg.length - 1; i >= 0; i--) {
+				if (!seg[i]) continue;
+				var s = seg[i].split('=');
+				if (ret[s[0]] == undefined)
+					ret[s[0]] = s[1];
+			}
+			return ret;
+		}
+
+		function replaceDomain(key, idx) {
+			// console.log("replaceDomain", key, idx, (typeof egret === 'undefined') ? "" : egret.getTimer());
+			if (!idx) return key;
+			var url = key;
+			if (idx && urlArray[idx]) {
+				url = urlArray[idx] + url;
+			}
+			return url;
+		};
+
+		function cacheHandle() {
+			var bReloading;
+			var reload = function (force = false) {
+				console.warn('html call reload', performance.now());
+				bgInfo.bNeedReload = true;
+				if (!bReloading) {
+					//遊戲已進入時跳出詢問框
+					if (htmlInfo.bViewInit) {
+						var strAsk;
+						switch (bgInfo.locale) {
+							case "zh_CN":
+							case undefined:
+								strAsk = "发现新版本，请更新后再进行游戏！"; break;
+							case "zh_TW":
+								strAsk = "發現新版本，請更新後再進行遊戲！"; break;
+							default:
+								strAsk = "Found a new version, please update the game!"; break;
+						}
+						if (!confirm(strAsk))
+							return
+					}
+					bUrlLogout = true;
+					bReloading = true;
+					console.warn('===================  window.location.reload =======================', performance.now());
+					window.location.reload();
+				}
+			}
+			if ('serviceWorker' in navigator) {
+				let swFile = htmlInfo.pwa ? "pwa_sw.js" : "index_serviceworker.js";
+				let scope = self.location.pathname;
+				let idx = scope.lastIndexOf("/");
+				let bUnregister = false;
+				let swRegister;
+				scope = scope.substring(0, idx + 1);
+				console.warn('serviceWorker start', scope, navigator.serviceWorker.controller, performance.now());
+				navigator.serviceWorker.register(swFile, { scope: scope }).then((reg) => {
+					swRegister = reg;
+					console.warn("ServiceWorker registration success ", performance.now());
+					if (navigator.serviceWorker.controller) {
+						console.warn('serviceWorker controller postMessage ', htmlInfo.version, performance.now());
+						navigator.serviceWorker.controller.postMessage({ type: "VERSION", value: htmlInfo.version });
+					}
+					var curState;
+					if (reg.installing) {
+						console.warn('serviceWorker installing', performance.now());
+						curState = reg.installing;
+					} else if (reg.waiting) {
+						console.warn('serviceWorker waiting', performance.now());
+						curState = reg.waiting;
+					} else if (reg.active) {
+						console.warn('serviceWorker active', performance.now());
+						curState = reg.active;
+					}
+					if (curState) {
+						curState.addEventListener("statechange", (e) => {
+							console.warn("serviceWorker statechange", e.target.state, performance.now());
+						});
+					}
+					initHtml();
+				}).catch((reson) => {
+					console.error("ServiceWorker registration fail ", reson, performance.now());
+					initHtml();
+				});
+				var bOldIOS = undefined;
+				const update = () => {
+					console.warn("serviceWorker update", performance.now());
+					if (bOldIOS == undefined) {
+						bOldIOS = false;
+						if (/iPhone/.test(navigator.userAgent)) {
+							var ver = navigator.userAgent.match(/OS (\d+)/);
+							if (ver[1] && +ver[1] < 15)
+								bOldIOS = true;
+						}
+					}
+					if (bOldIOS) {
+						if (navigator.serviceWorker.controller)
+							navigator.serviceWorker.controller.postMessage({ type: "UPDATE", value: htmlInfo.version });
+					} else {
+						swRegister.update();
+					}
+
+				}
+				const unregisterSW = () => {
+					if (bUnregister) return;
+					bUnregister = true;
+					swRegister.unregister().then((boolean) => {
+						console.warn('serviceWorker unregister', boolean, performance.now());
+						if (boolean) reload();
+					}).catch((reason) => {
+						console.error("ServiceWorker unregister fail ", reason, performance.now());
+					});
+				}
+				navigator.serviceWorker.addEventListener('message', (e) => {
+					const data = e.data;
+					if (data) {
+						console.warn('serviceWorker message ', data, performance.now());
+						if (data.type == "reload")
+							reload();
+						else if (data.type == "unregister")
+							unregisterSW();
+					}
+				});
+				navigator.serviceWorker.addEventListener("controllerchange", () => {
+					console.warn("serviceWorker controllerchange!", performance.now());
+					reload();
+				});
+				window.unregisterSW = unregisterSW;
+				setInterval(update, 10000);
+			} else if (window.applicationCache && !htmlInfo.pwa) {
+				let arr = window.location.pathname.split("/");
+				let htmlName = arr[arr.length - 1];
+				window.location.href = window.location.href.replace(htmlName, "index_a.html");
+			}
+			
+		}
+
+	</script>
+</body>
+
+</html>
