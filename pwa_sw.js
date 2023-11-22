@@ -1,7 +1,7 @@
 // 缓存
 var self = this;
-var hash = "acf13236404c35359afd2b87e8e4e98c";
-var version = "4.0.8.25";
+var hash = "bb93f5005ed3f0b4854d0a6b735a7854";
+var version = "4.0.8.22";
 var htmlVersion;
 var openName = "pwa";
 let idx = self.location.pathname.lastIndexOf("/");
@@ -665,7 +665,7 @@ async function checkSW() {
 
 	callClients("checkSW start: v" + version);
 	try {
-		let response = await fetch(self.location.href);
+		let response = await fetch(self.location.href, { cache: "reload" });
 		if (response && response.status == 200) {
 			const text = await response.text();
 			var hasgRegex = /var hash = "(.*?)";/;
